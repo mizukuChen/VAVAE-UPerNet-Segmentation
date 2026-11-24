@@ -1,0 +1,18 @@
+# Python 缓存
+__pycache__/
+*.py[cod]
+
+# 预训练权重、数据集与模型产出
+*.pt
+*.pth
+*.bin
+*.zip
+data/
+
+# LightningDiT 仅保留依赖的 autoencoder.py 与 LICENSE
+LightningDiT/*
+!LightningDiT/LICENSE
+!LightningDiT/tokenizer/
+LightningDiT/tokenizer/*
+!LightningDiT/tokenizer/autoencoder.py
+
