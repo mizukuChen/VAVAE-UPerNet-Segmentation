@@ -79,7 +79,7 @@
 
 | 项目   | 记录                              |
 | ---- | ------------------------------- |
-| 硬件设备 | 租用单卡 GPU（具体型号待补充），单卡训练（未启用 DDP） |
+| 硬件设备 | 单卡 GPU（未启用 DDP）                 |
 | 显存峰值 | 估算 2～3 GB，8 GB 显卡可运行            |
 | 训练耗时 | 每轮约 14.1 分钟，20 轮总计约 4.7 小时      |
 
@@ -126,8 +126,6 @@
 | `last.pth`                  | 第 20 轮完整训练状态，639 MB，含优化器 / 调度器 / scaler           |
 | `metrics.csv`               | 每轮 `train_loss`、`val_loss`、`mIoU`、`pixel_acc` 与耗时 |
 | `train.log`                 | 完整训练日志                                            |
-| `stdout.log` / `stderr.log` | 首段运行日志（第 1～12 轮中断）                                |
-| `resume-*.stdout.log`       | 从第 12 轮 `last.pth` 续训至结束的日志                       |
 
 ---
 
@@ -137,7 +135,7 @@
 
 ```text
 .
-├── README.md                              # 任务汇报与说明（本文件）
+├── README.md                              # 项目说明（本文件）
 ├── vavae-imagenet256-f16d32-dinov2.pt     # VA-VAE 预训练权重
 ├── upernet/
 │   ├── vavae_backbone.py                  # VA-VAE encoder 多尺度特征提取
@@ -145,13 +143,13 @@
 │   ├── train.py                           # 数据加载、训练、评测与续训入口
 │   ├── visualize.py                       # 推理并生成四格分割预览图
 │   ├── ade_palette.py                     # ADE20K 150 类名称与配色
-│   ├── README.md                          # 详细参数、断点续训与环境说明
+│   ├── README.md                          # 训练硬件配置、依赖与启动说明
 │   └── requirements.txt                   # 运行依赖
 ├── data/
 │   ├── ADEChallengeData2016/              # ADE20K 图像与标注
 │   └── upernet-swin-tiny-pytorch_model.bin# UPerNet 预训练头权重
 ├── checkpoints/                           # 训练权重与日志
-├── docs/images/                           # 分割预览图与单图指标
+├── docs/images/                           # 分割预览图
 └── LightningDiT/                          # 上游代码库（仅使用 tokenizer/autoencoder.py）
 ```
 
@@ -195,7 +193,7 @@ python upernet/visualize.py --ckpt checkpoints/best.pth --output-dir docs/images
 
 #### 4. 启动训练
 
-如需**从头复现训练、断点续训**，或查看训练所需的**硬件配置、完整依赖说明与命令行参数**，请查阅 👉 [`upernet/README.md`](upernet/README.md)。
+如需**从头复现训练**，或查看训练所需的**硬件配置与启动说明**，请查阅 👉 [`upernet/README.md`](upernet/README.md)。
 
 ---
 
@@ -204,7 +202,7 @@ python upernet/visualize.py --ckpt checkpoints/best.pth --output-dir docs/images
 | 名称 | 用途 | 大小 | 来源 |
 |---|---|---|---|
 | `LightningDiT/` | VA-VAE `tokenizer/autoencoder.py` 中的 encoder 定义 | — | [hustvl/LightningDiT](https://github.com/hustvl/LightningDiT)（VA-VAE, CVPR 2025） |
-| `vavae-imagenet256-f16d32-dinov2.pt` | 冻结的 VA-VAE encoder 权重 | 2,148,559,914 字节 | [hustvl/vavae-imagenet256-f16d32-dinov2](https://huggingface.co/hustvl/vavae-imagenet256-f16d32-dinov2) |
-| `upernet-swin-tiny-pytorch_model.bin` | UPerNet head 部分预训练初始化权重 | 240,155,657 字节 | [openmmlab/upernet-swin-tiny](https://huggingface.co/openmmlab/upernet-swin-tiny)（本机直连 502，经 `hf-mirror.com` 下载） |
-| `ADEChallengeData2016.zip` | ADE20K 训练 / 验证图像与像素级标注 | 967,382,037 字节（解压约 2.3 GB） | [MIT CSAIL ADE20K](https://data.csail.mit.edu/places/ADEchallenge/ADEChallengeData2016.zip)（SHA1: `219e1696abb36c8ba3a3afe7fb2f4b4606a897c7`） |
+| `vavae-imagenet256-f16d32-dinov2.pt` | 冻结的 VA-VAE encoder 权重 | 约 2.0 GB | [hustvl/vavae-imagenet256-f16d32-dinov2](https://huggingface.co/hustvl/vavae-imagenet256-f16d32-dinov2) |
+| `upernet-swin-tiny-pytorch_model.bin` | UPerNet head 部分预训练初始化权重 | 约 229 MB | [openmmlab/upernet-swin-tiny](https://huggingface.co/openmmlab/upernet-swin-tiny) |
+| `ADEChallengeData2016.zip` | ADE20K 训练 / 验证图像与像素级标注 | 约 922 MB（解压约 2.3 GB） | [MIT CSAIL ADE20K](https://data.csail.mit.edu/places/ADEchallenge/ADEChallengeData2016.zip) |
 | ADE20K 类别名与配色 | 分割预览图 150 类上色 | 150 类 | [mmsegmentation `ADE20KDataset.METAINFO`](https://github.com/open-mmlab/mmsegmentation/blob/main/mmseg/datasets/ade.py) |

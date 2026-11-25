@@ -1,6 +1,6 @@
 # VAVAE + UPerNet 语义分割训练指南
 
-本文档面向训练复现，介绍训练所需的**硬件配置**、**环境与依赖要求**、**数据/权重准备**以及**启动训练与断点续训方法**。模型对接方案与实验结果总览请见根目录 [`README.md`](../README.md)。
+本文档面向训练复现，介绍训练所需的**硬件配置**、**环境与依赖要求**、**数据/权重准备**以及**启动训练方法**。模型对接方案与实验结果总览请见根目录 [`README.md`](../README.md)。
 
 ---
 
@@ -36,15 +36,15 @@ pip install -r upernet/requirements.txt
 由于数据集与权重文件未上传至 Git 仓库，启动训练前请先手动下载并按如下结构放置：
 
 ```text
-vavae(upernet)/
-├── vavae-imagenet256-f16d32-dinov2.pt             # 必需，2,148,559,914 字节
+VAVAE-UPerNet-Segmentation/
+├── vavae-imagenet256-f16d32-dinov2.pt             # 必需，约 2.0 GB
 ├── data/
 │   ├── ADEChallengeData2016/                      # 必需，解压自 ADEChallengeData2016.zip
 │   │   ├── images/training                        # 20,210 张 jpg
 │   │   ├── images/validation                      # 2,000 张 jpg
 │   │   ├── annotations/training                   # 20,210 张 png
 │   │   └── annotations/validation                 # 2,000 张 png
-│   └── upernet-swin-tiny-pytorch_model.bin        # 可选，240,155,657 字节
+│   └── upernet-swin-tiny-pytorch_model.bin        # 可选，约 229 MB
 └── LightningDiT/
     └── tokenizer/autoencoder.py                   # 随仓库提供，切勿移动或改名
 ```
@@ -59,7 +59,7 @@ vavae(upernet)/
 
 ## 4. 启动训练方法
 
-以下所有命令均在项目根目录 `vavae(upernet)/` 下执行。
+以下所有命令均在项目根目录下执行。
 
 ### 4.1 小样本环境冒烟测试（CPU 可跑，约 1 分钟）
 
